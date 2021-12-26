@@ -1,31 +1,35 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import styled from 'styled-components'
-import { mq } from '../utils'
-import { Button } from './Button'
+import { RequireAuth } from '../contexts/AuthContext'
+
+// Pages Imports
+import Home from '../pages/Home'
+import Info from '../pages/Information'
+import Login from '../pages/Login'
+import NotFound from '../pages/NotFound'
+import Protected from '../pages/Protected'
+import { Header } from './Header'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const increment = (inc) => setCount((prev) => prev + inc)
-
   return (
-    <Container>
-      <Button onClick={() => increment(2)}>Increment Count +{count}</Button>
-    </Container>
+    <AppContainer id="app">
+      <Router>
+        <Header />
+        <Routes>
+          <Route path={'/'} index element={<Home />} />
+          <Route path={'/information'} element={<Info />} />
+          <Route path={'/auth'} element={<Login />} />
+          <Route path={'/protected'} element={<RequireAuth><Protected /></RequireAuth>} />
+          <Route path={'*'} element={<NotFound />} />
+        </Routes>
+      </Router>
+    </AppContainer>
   )
 }
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-
-  @media ${mq.tablet} {
-    background-color: #111;
-  }
-
-`
-
 export default App
+
+
+const AppContainer = styled.div`
+  padding: 1rem;
+`
